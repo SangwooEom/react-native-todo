@@ -16,7 +16,17 @@ const StyledInput = styled.TextInput.attrs(({theme}: {theme: Theme}) => ({
   color: ${props => props.theme.text};
 `;
 
-const Input = ({placeholder}: {placeholder: string}) => {
+const Input = ({
+  placeholder,
+  value,
+  onChangeText,
+  onSubmitEditing,
+}: {
+  placeholder: string;
+  value: string;
+  onChangeText: (text: string) => void;
+  onSubmitEditing: () => void;
+}) => {
   const width = useWindowDimensions().width;
   return (
     <StyledInput
@@ -26,6 +36,9 @@ const Input = ({placeholder}: {placeholder: string}) => {
       autoCapitalize="none"
       autoCorrect={false}
       returnKeyType="done"
+      value={value}
+      onChangeText={onChangeText}
+      onSubmitEditing={onSubmitEditing}
     />
   );
 };

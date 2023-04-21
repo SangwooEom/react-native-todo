@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled, {ThemeProvider} from 'styled-components/native';
 import {theme, Theme} from './theme';
-import {StatusBar} from 'react-native';
+import {StatusBar, Alert} from 'react-native';
 import Input from './components/Input';
 
 const Container = styled.SafeAreaView<{theme: Theme}>`
@@ -20,6 +20,17 @@ const Title = styled.Text<{theme: Theme}>`
 `;
 
 export default function App() {
+  const [newTask, setNewTask] = useState('');
+
+  const _addTask = () => {
+    Alert.alert(`Add: ${newTask}`);
+    setNewTask('');
+  };
+
+  const _handleTextChange = (text: string) => {
+    setNewTask(text);
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <Container>
@@ -28,7 +39,12 @@ export default function App() {
           backgroundColor={theme.background}
         />
         <Title>TODO List</Title>
-        <Input placeholder="+ Add a Task" />
+        <Input
+          placeholder="+ Add a Task"
+          value={newTask}
+          onChangeText={_handleTextChange}
+          onSubmitEditing={_addTask}
+        />
       </Container>
     </ThemeProvider>
   );
