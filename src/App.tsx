@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styled, {ThemeProvider} from 'styled-components/native';
 import {theme, Theme} from './theme';
 import {StatusBar, Dimensions} from 'react-native';
 import Input from './components/Input';
 import Task from './components/Task';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Container = styled.SafeAreaView<{theme: Theme}>`
   flex: 1;
@@ -29,12 +30,21 @@ export default function App() {
   const width = Dimensions.get('window').width;
   const [newTask, setNewTask] = useState('');
 
-  const [tasks, setTasks] = useState<Tasks>({
-    '1': {id: '1', text: 'Hanbit', completed: false},
-    '2': {id: '2', text: 'React Native', completed: true},
-    '3': {id: '3', text: 'React Native Sample', completed: false},
-    '4': {id: '4', text: 'Edit TODO Item', completed: false},
-  });
+  const [tasks, setTasks] = useState<Tasks>({});
+
+  const _saveTasks = async (tasksValue: Tasks) => {
+    try {
+      await AsyncStorage.setItem('tasks', JSON.stringify(tasksValue));
+      setTasks(tasksValue);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const _loadTasks = async () => {
+    const loadedTasks = await AsyncStorage.getItem('tasks');
+    setTasks(JSON.parse(loadedTasks || '{}'));
+  };
 
   const _addTask = () => {
     const ID = Date.now().toString();
@@ -43,24 +53,28 @@ export default function App() {
     };
     setNewTask('');
     setTasks({...tasks, ...newTaskObject});
+    _saveTasks({...tasks, ...newTaskObject});
   };
 
   const _deleteTask = (id: string) => {
     const currentTasks = Object.assign({}, tasks);
     delete currentTasks[id];
     setTasks(currentTasks);
+    _saveTasks(currentTasks);
   };
 
   const _toggleTask = (id: string) => {
     const currentTasks = Object.assign({}, tasks);
     currentTasks[id].completed = !currentTasks[id].completed;
     setTasks(currentTasks);
+    _saveTasks(currentTasks);
   };
 
   const _updateTask = (item: Task) => {
     const currentTasks = Object.assign({}, tasks);
     currentTasks[item.id] = item;
     setTasks(currentTasks);
+    _saveTasks(currentTasks);
   };
 
   const _handleTextChange = (text: string) => {
@@ -70,6 +84,11 @@ export default function App() {
   const _onBlur = () => {
     setNewTask('');
   };
+
+  useEffect(() => {
+    _loadTasks();
+    console.log('동작');
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>

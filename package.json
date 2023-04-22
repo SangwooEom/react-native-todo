@@ -10,9 +10,11 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.18.1",
     "prop-types": "^15.8.1",
     "react": "18.2.0",
     "react-native": "0.71.7",
+    "react-native-splash-screen": "^3.3.0",
     "styled-components": "^5.3.9"
   },
   "devDependencies": {
