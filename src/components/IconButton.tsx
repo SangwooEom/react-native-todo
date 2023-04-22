@@ -1,5 +1,5 @@
 import React from 'react';
-import {GestureResponderEvent, TouchableOpacity} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {images, Images} from '../Images';
 import {Theme} from '../theme';
@@ -17,12 +17,19 @@ const Icon = styled.Image<{
 const IconButton = ({
   type,
   onPressOut,
+  id,
 }: {
   type: keyof typeof images;
-  onPressOut?: (event: GestureResponderEvent) => void;
+  onPressOut?: (id: string) => void;
+  id?: string;
 }) => {
+  const _onPressOut = () => {
+    if (onPressOut && id) {
+      onPressOut(id);
+    }
+  };
   return (
-    <TouchableOpacity onPressOut={onPressOut}>
+    <TouchableOpacity onPressOut={_onPressOut}>
       <Icon source={type} />
     </TouchableOpacity>
   );

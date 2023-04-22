@@ -19,13 +19,19 @@ const Contents = styled.Text<{theme: Theme}>`
   color: ${props => props.theme.text};
 `;
 
-const Task = ({text}: {text: string}) => {
+const Task = ({
+  item,
+  deleteTask,
+}: {
+  item: {id: string; text: string; completed: boolean};
+  deleteTask: (id: string) => void;
+}) => {
   return (
     <Container>
       <IconButton type={images.uncompleted} />
-      <Contents>{text}</Contents>
+      <Contents>{item.text}</Contents>
       <IconButton type={images.update} />
-      <IconButton type={images.delete} />
+      <IconButton type={images.delete} id={item.id} onPressOut={deleteTask} />
     </Container>
   );
 };

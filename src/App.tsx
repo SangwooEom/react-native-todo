@@ -29,7 +29,7 @@ export default function App() {
   const width = Dimensions.get('window').width;
   const [newTask, setNewTask] = useState('');
 
-  const [tasks, setTasks] = useState({
+  const [tasks, setTasks] = useState<Tasks>({
     '1': {id: '1', text: 'Hanbit', completed: false},
     '2': {id: '2', text: 'React Native', completed: true},
     '3': {id: '3', text: 'React Native Sample', completed: false},
@@ -43,6 +43,12 @@ export default function App() {
     };
     setNewTask('');
     setTasks({...tasks, ...newTaskObject});
+  };
+
+  const _deleteTask = (id: string) => {
+    const currentTasks = Object.assign({}, tasks);
+    delete currentTasks[id];
+    setTasks(currentTasks);
   };
 
   const _handleTextChange = (text: string) => {
@@ -67,10 +73,20 @@ export default function App() {
           {Object.values(tasks)
             .reverse()
             .map(item => (
-              <Task key={item.id} text={item.text} />
+              <Task key={item.id} item={item} deleteTask={_deleteTask} />
             ))}
         </List>
       </Container>
     </ThemeProvider>
   );
 }
+
+type Task = {
+  id: string;
+  text: string;
+  completed: boolean;
+};
+
+type Tasks = {
+  [key: string]: Task;
+};
