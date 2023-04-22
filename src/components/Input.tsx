@@ -21,11 +21,13 @@ const Input = ({
   value,
   onChangeText,
   onSubmitEditing,
+  onBlur,
 }: {
   placeholder?: string;
   value: string;
   onChangeText: (text: string) => void;
   onSubmitEditing: () => void;
+  onBlur: () => void;
 }) => {
   const width = useWindowDimensions().width;
   return (
@@ -39,6 +41,7 @@ const Input = ({
       value={value}
       onChangeText={onChangeText}
       onSubmitEditing={onSubmitEditing}
+      onBlur={onBlur}
     />
   );
 };

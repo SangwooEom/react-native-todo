@@ -47,11 +47,19 @@ const Task = ({
     }
   };
 
+  const _onBlur = () => {
+    if (isEditing) {
+      setIsEditing(false);
+      setText(item.text);
+    }
+  };
+
   return isEditing ? (
     <Input
       value={text}
-      onChangeText={text => setText(text)}
+      onChangeText={textValue => setText(textValue)}
       onSubmitEditing={_onSubmitEditing}
+      onBlur={_onBlur}
     />
   ) : (
     <Container>
