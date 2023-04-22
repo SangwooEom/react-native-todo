@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled, {ThemeProvider} from 'styled-components/native';
 import {theme, Theme} from './theme';
-import {StatusBar, Alert, Dimensions} from 'react-native';
+import {StatusBar, Dimensions} from 'react-native';
 import Input from './components/Input';
 import Task from './components/Task';
 
@@ -29,9 +29,20 @@ export default function App() {
   const width = Dimensions.get('window').width;
   const [newTask, setNewTask] = useState('');
 
+  const [tasks, setTasks] = useState({
+    '1': {id: '1', text: 'Hanbit', completed: false},
+    '2': {id: '2', text: 'React Native', completed: true},
+    '3': {id: '3', text: 'React Native Sample', completed: false},
+    '4': {id: '4', text: 'Edit TODO Item', completed: false},
+  });
+
   const _addTask = () => {
-    Alert.alert(`Add: ${newTask}`);
+    const ID = Date.now().toString();
+    const newTaskObject = {
+      [ID]: {id: ID, text: newTask, completed: false},
+    };
     setNewTask('');
+    setTasks({...tasks, ...newTaskObject});
   };
 
   const _handleTextChange = (text: string) => {
@@ -53,10 +64,11 @@ export default function App() {
           onSubmitEditing={_addTask}
         />
         <List width={width}>
-          <Task text="Hanbit" />
-          <Task text="React Native" />
-          <Task text="React Native Sample" />
-          <Task text="Edit TODO Item" />
+          {Object.values(tasks)
+            .reverse()
+            .map(item => (
+              <Task key={item.id} text={item.text} />
+            ))}
         </List>
       </Container>
     </ThemeProvider>
