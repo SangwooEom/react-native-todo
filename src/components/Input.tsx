@@ -22,7 +22,7 @@ const Input = ({
   onChangeText,
   onSubmitEditing,
 }: {
-  placeholder: string;
+  placeholder?: string;
   value: string;
   onChangeText: (text: string) => void;
   onSubmitEditing: () => void;

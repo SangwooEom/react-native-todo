@@ -7,8 +7,10 @@ import {Theme} from '../theme';
 const Icon = styled.Image<{
   source: keyof Images;
   theme: Theme;
+  completed?: boolean;
 }>`
-  tint-color: ${props => props.theme.text};
+  tint-color: ${props =>
+    props.completed ? props.theme.done : props.theme.text};
   width: 30px;
   height: 30px;
   margin: 10px;
@@ -18,19 +20,21 @@ const IconButton = ({
   type,
   onPressOut,
   id,
+  completed,
 }: {
   type: keyof typeof images;
-  onPressOut?: (id: string) => void;
+  onPressOut?: (id: any) => void;
   id?: string;
+  completed?: boolean;
 }) => {
   const _onPressOut = () => {
-    if (onPressOut && id) {
+    if (onPressOut) {
       onPressOut(id);
     }
   };
   return (
     <TouchableOpacity onPressOut={_onPressOut}>
-      <Icon source={type} />
+      <Icon source={type} completed={completed} />
     </TouchableOpacity>
   );
 };
